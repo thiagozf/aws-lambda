@@ -243,7 +243,7 @@ const updateLambdaFunctionCode = async (lambda, inputs) => {
   functionCodeParams.ZipFile = await readFile(inputs.src)
   const res = await lambda.updateFunctionCode(functionCodeParams).promise()
 
-  return res.FunctionArn
+  return { arn: res.FunctionArn, hash: res.CodeSha256, version: res.Version }
 }
 
 /**

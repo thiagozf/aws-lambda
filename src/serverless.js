@@ -95,13 +95,15 @@ class AwsLambda extends Component {
       const createResult = await createLambdaFunction(lambda, inputs)
       inputs.arn = createResult.arn
       inputs.hash = createResult.hash
+      inputs.version = createResult.version
       console.log(`Successfully created an AWS Lambda function`)
     } else {
       // Update a Lambda function
       inputs.arn = prevLambda.arn
       console.log(`Updatinng ${inputs.name} AWS lambda function.`)
-      await updateLambdaFunctionCode(lambda, inputs)
+      const updateResult = await updateLambdaFunctionCode(lambda, inputs)
       await updateLambdaFunctionConfig(lambda, inputs)
+      inputs.version = updateResult.version
       console.log(`Successfully updated AWS Lambda function`)
     }
 
@@ -109,12 +111,14 @@ class AwsLambda extends Component {
     this.state.name = inputs.name
     this.state.arn = inputs.arn
     this.state.region = inputs.region
+    this.state.version = inputs.version
 
     return {
       name: inputs.name,
       arn: inputs.arn,
       securityGroupIds: inputs.securityGroupIds,
-      subnetIds: inputs.subnetIds
+      subnetIds: inputs.subnetIds,
+      version: inputs.version
     }
   }
 
